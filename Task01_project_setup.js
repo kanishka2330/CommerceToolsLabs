@@ -1,6 +1,7 @@
 const { apiRoot, projectKey } = require("./handson/client.js");
 const { log } = require("./logger.js");
 
+const kanishka = 1234;
 // TODO 1: Complete the functions in
 // ./handson/client.js
 
