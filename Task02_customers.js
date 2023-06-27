@@ -17,16 +17,16 @@ const customerDraftData = {
   countryCode: "DE",
 };
 
- createCustomer(customerDraftData).then(log).catch(log);
+//  createCustomer(customerDraftData).then(log).catch(log);
 
-// getCustomerByKey('test123').then(log).catch(log);
+//  getCustomerByKey('test123').then(log).catch(log);
 
-// getCustomerById("a303f0e7-8535-4784-a638-e59f05208355").then(log).catch(log);
+//  getCustomerById("8b4a252f-4e0d-44f0-a9c9-adf62a3bf9f3").then(log).catch(log);
 
-// getCustomerByKey('test123')
-//   .then(createCustomerToken)
-//   .then(confirmCustomerEmail)
-//   .then(log)
-//   .catch(log);
+ getCustomerByKey('test123')
+  .then(createCustomerToken)
+  .then(confirmCustomerEmail)
+  .then(log)
+  .catch(log);
 
-//assignCustomerToCustomerGroup('test123','indoor-customers').then(log).catch(log);
+assignCustomerToCustomerGroup('test123','indoor-customers').then(log).catch(log);
