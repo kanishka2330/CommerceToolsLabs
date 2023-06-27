@@ -13,12 +13,33 @@ require("dotenv").config();
 
 const fetch = require("node-fetch");
 
+const { createAuthMiddlewareForClientCredentialsFlow } = require('@commercetools/sdk-middleware-auth')
+
+const { createHttpMiddleware } = require('@commercetools/sdk-middleware-http')
+
 const projectKey = process.env.CTP_PROJECT_KEY;
 
 //use .env for credentials process.env.adminClientId 
 
 const getClient = () => {
-
+  const authMiddleware = createAuthMiddlewareForClientCredentialsFlow({
+      host: process.env.CTP_AUTH_URL,
+      projectKey,
+      credentials: {
+          clientId: process.env.CTP_CLIENT_ID,
+          clientSecret: process.env.CTP_CLIENT_SECRET,
+      },
+      scopes: [process.env.CTP_SCOPES],
+      fetch,
+  })
+  const httpMiddleware = createHttpMiddleware({
+      host: process.env.CTP_API_URL,
+      fetch,
+  })
+  const client = createClient({
+      middlewares: [authMiddleware, httpMiddleware],
+  })
+  return client
 };
 
 const getImportClient = () => {
