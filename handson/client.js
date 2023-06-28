@@ -3,8 +3,10 @@ const {
   createHttpClient,
   createAuthForClientCredentialsFlow,
   createAuthForPasswordFlow
-} = require ('@commercetools/sdk-client-v2')
-const { createApiBuilderFromCtpClient } = require('@commercetools/platform-sdk')
+} = require('@commercetools/sdk-client-v2')
+const {
+  createApiBuilderFromCtpClient
+} = require('@commercetools/platform-sdk')
 
 const {
   createApiBuilderFromCtpClient: createApiBuilderFromCtpClientOnlyForImports,
@@ -13,9 +15,13 @@ require("dotenv").config();
 
 const fetch = require("node-fetch");
 
-const { createAuthMiddlewareForClientCredentialsFlow } = require('@commercetools/sdk-middleware-auth')
+const {
+  createAuthMiddlewareForClientCredentialsFlow
+} = require('@commercetools/sdk-middleware-auth')
 
-const { createHttpMiddleware } = require('@commercetools/sdk-middleware-http')
+const {
+  createHttpMiddleware
+} = require('@commercetools/sdk-middleware-http')
 
 const projectKey = process.env.CTP_PROJECT_KEY;
 
@@ -23,27 +29,44 @@ const projectKey = process.env.CTP_PROJECT_KEY;
 
 const getClient = () => {
   const authMiddleware = createAuthMiddlewareForClientCredentialsFlow({
-      host: process.env.CTP_AUTH_URL,
-      projectKey,
-      credentials: {
-          clientId: process.env.CTP_CLIENT_ID,
-          clientSecret: process.env.CTP_CLIENT_SECRET,
-      },
-      scopes: [process.env.CTP_SCOPES],
-      fetch,
+    host: process.env.CTP_AUTH_URL,
+    projectKey,
+    credentials: {
+      clientId: process.env.CTP_CLIENT_ID,
+      clientSecret: process.env.CTP_CLIENT_SECRET,
+    },
+    scopes: [process.env.CTP_SCOPES],
+    fetch,
   })
   const httpMiddleware = createHttpMiddleware({
-      host: process.env.CTP_API_URL,
-      fetch,
+    host: process.env.CTP_API_URL,
+    fetch,
   })
   const client = createClient({
-      middlewares: [authMiddleware, httpMiddleware],
+    middlewares: [authMiddleware, httpMiddleware],
   })
   return client
 };
 
 const getImportClient = () => {
-
+  const authMiddleware = createAuthMiddlewareForClientCredentialsFlow({
+    host: process.env.CTP_AUTH_URL,
+    projectKey,
+    credentials: {
+      clientId: process.env.CTP_CLIENT_ID,
+      clientSecret: process.env.CTP_CLIENT_SECRET,
+    },
+    scopes: [process.env.CTP_SCOPES],
+    fetch,
+  })
+  const httpMiddleware = createHttpMiddleware({
+    host: process.env.CTP_IMPORT_URL,
+    fetch,
+  })
+  const client = createClient({
+    middlewares: [authMiddleware, httpMiddleware],
+  })
+  return client
 };
 
 const getStoreClient = () => {
@@ -58,9 +81,9 @@ const getMyAPIClient = () => {
 
 module.exports.apiRoot = createApiBuilderFromCtpClient(getClient());
 
-// module.exports.importApiRoot = createApiBuilderFromCtpClientOnlyForImports(
-//   getImportClient()
-// );
+module.exports.importApiRoot = createApiBuilderFromCtpClientOnlyForImports(
+  getImportClient()
+);
 
 // module.exports.storeApiRoot = createApiBuilderFromCtpClient(getStoreClient());
 

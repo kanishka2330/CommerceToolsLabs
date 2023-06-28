@@ -1,17 +1,52 @@
-const { importApiRoot, projectKey } = require("./client.js");
+const { importApiRoot, projectKey} = require("./client.js");
 const csvtojsonV2 = require("csvtojson");
 
-module.exports.createImportContainer = (key) =>{}
+module.exports.createImportContainer = (containerKey) =>
+  importApiRoot
+    .withProjectKeyValue({ projectKey })
+    .importContainers()
+    .post({ body: { key: containerKey } })
+    .execute()
 
-module.exports.checkImportSummary = (importContainerKey) => {}
+module.exports.checkImportSummary = (importContainerKey) => 
+  importApiRoot
+    .withProjectKeyValue({ projectKey })
+    .importContainers()
+    .withImportContainerKeyValue({importContainerKey})
+    .importSummaries()
+    .get()
+    .execute()
 
-module.exports.checkImportOperations = (importContainerKey) => {}
 
-module.exports.checkImportOperationById = (id) => {}
+module.exports.checkImportOperations = (importContainerKey) => 
+  importApiRoot
+    .withProjectKeyValue({ projectKey })
+    .importContainers()
+    .withImportContainerKeyValue({importContainerKey})
+    .importOperations()
+    .get()
+    .execute()
 
-module.exports.importProducts = async (importContainerKey) => {}
 
-const createImportProductsDraft = async () => {
+module.exports.checkImportOperationById = (id) =>
+  importApiRoot
+    .withProjectKeyValue({ projectKey })
+    .importOperations()
+    .withIdValue({ id })
+    .get()
+    .execute();
+
+module.exports.importProducts = async (importContainerKey) =>{
+  return importApiRoot
+  .withProjectKeyValue({ projectKey })
+  .productDrafts()
+  .importContainers()
+  .withImportContainerKeyValue({importContainerKey})
+  .post({ body: await createImportProductsDraft() })
+  .execute()
+}
+
+const   createImportProductsDraft = async () => {
   return {
     type: "product-draft",
     resources: await getProductDraftsArray(),
