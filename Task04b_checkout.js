@@ -2,7 +2,7 @@ const checkout = require("./handson/order");
 const { log } = require("./logger.js");
 
 const customerKey = "";
-const cartId = "";
+const cartId = "1d595d5e-abd0-4883-b37a-0c068d5ab20c";
 const orderId = "";
 
 const paymentDraft = {
@@ -13,10 +13,16 @@ const paymentDraft = {
   }
 }
 
-// create a cart and update the catId variable
- checkout.createCart(customerKey).then(log).catch(log);
+const cartDraftData = {
+  currency: "EUR",
+  customerId: "8b4a252f-4e0d-44f0-a9c9-adf62a3bf9f3", //change customerId as you set it in Task2
+  countryCode: "DE",
+};
 
-// checkout.addLineItemsToCart(cartId,['tulip-seed-box','tulip-seed-sack']).then(log).catch(log);
+// create a cart and update the catId variable
+//  checkout.createCart(cartDraftData).then(log).catch(log);
+
+// checkout.addLineItemsToCart(['ff-SKU101','ff-SKU102'], cartId).then(log).catch(log);
 
 // checkout.addDiscountCodeToCart(cartId, "SUMMER").then(log).catch(log);
 // checkout.getCartById(cartId).then(log).catch(log);
@@ -31,20 +37,20 @@ const paymentDraft = {
 // checkout.updateOrderCustomState(orderId,"ff-order-packed").then(log).catch(log);
 
 const checkoutProcess = async () => {
-  let emptyCart = await checkout.createCart(customerKey);
+  let emptyCart = await checkout.createCart(cartDraftData);
 
   let filledCart = await checkout.addLineItemsToCart(
-    emptyCart.body.id,['tulip-seed-box','tulip-seed-sack']
+    ['ff-SKU101','ff-SKU102'], emptyCart.body.id
   );
   filledCart = await checkout.addDiscountCodeToCart(
-    emptyCart.body.id, 'SUMMER'
+    emptyCart.body.id, 'myFirstPurchase'
   );
 
   let order = await checkout.createOrderFromCart(filledCart.body.id);
   const payment = await checkout.createPayment(paymentDraft);
-  order = await checkout.addPaymentToOrder(order.body.id, payment.body.id);
-  order = await checkout.setOrderState(order.body.id, 'Confirmed');
-  order = await checkout.updateOrderCustomState(order.body.id,'ff-order-packed');
+  order = await checkout.addPaymentToOrder( payment.body.id, order.body.id,);
+  // order = await checkout.setOrderState(order.body.id, 'Confirmed');
+  // order = await checkout.updateOrderCustomState(order.body.id,'ff-order-packed');
   if (order) {
     return {
       status: 201,
@@ -53,4 +59,4 @@ const checkoutProcess = async () => {
   }
 };
 
-// checkoutProcess().then(log).catch(log);
+checkoutProcess().then(log).catch(log);
