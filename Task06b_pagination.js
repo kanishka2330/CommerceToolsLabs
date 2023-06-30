@@ -8,7 +8,6 @@ const getPagedQueryResults = async _ => {
     while (!lastPage){
         where = lastId != null ? `id > "${lastId}"`: null;
         products = await simulatePagination(perPage,where)
-        log("//////////////////")
         products.body.results.forEach(element => {
             log(element.id)
         });
