@@ -1,16 +1,35 @@
-const { apiRoot, storeApiRoot, projectKey } = require("./client.js");
+const {
+  apiRoot,
+  storeApiRoot,
+  projectKey
+} = require("./client.js");
 
 //TODO store and productProjection endpoint
 
 module.exports.getStoreByKey = (key) =>
-  apiRoot.withProjectKey({projectKey})
-    .stores()
-    .withKey({key})
-    .get()
-    .execute()
+  apiRoot.withProjectKey({
+    projectKey
+  })
+  .stores()
+  .withKey({
+    key
+  })
+  .get()
+  .execute()
 
 
-module.exports.getCustomersInStore = (storeKey) => {}
+module.exports.getCustomersInStore = (storeKey) =>
+  storeApiRoot
+  .withProjectKey({
+    projectKey
+  })
+  .inStoreKeyWithStoreKeyValue({
+    storeKey
+  })
+  .customers()
+  .get()
+  .execute();
+
 
 module.exports.addProductSelectionToStore = async (storeKey, productSelectionKey) => {}
 
