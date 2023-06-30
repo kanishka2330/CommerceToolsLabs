@@ -1,6 +1,5 @@
-const { apiRoot, projectKey } = require("./handson/client.js");
 const {log} = require('./logger');
-
+const { createCustomType } = require("./handson/customTypes");
 
 const typeDraft = {
     key:'ff-allowed-to-place-orders',
@@ -27,3 +26,4 @@ const typeDraft = {
 }
 
 // TODO : CREATE the custom type
+createCustomType(typeDraft).then(log).catch(log)
